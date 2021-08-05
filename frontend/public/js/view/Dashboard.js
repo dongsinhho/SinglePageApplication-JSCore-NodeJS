@@ -18,6 +18,7 @@ export default class extends PageAbstract {
             <p>
                 <a href="/contact">View recent posts</a>
             </p>
+            <script type="module" src="public/js/pagehandle/dashboardhandle.js"></script>
         `
     }
 }

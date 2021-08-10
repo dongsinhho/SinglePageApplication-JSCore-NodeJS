@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo");
 require('dotenv').config();
 
+
 const app = express();
 const PORT = process.env.PORT;
 const URL = process.env.MONGO_URL;
@@ -17,9 +18,13 @@ app.use(session({
     saveUninitialized: true,
     store: MongoStore.create({
         mongoUrl: URL,
-        dbName: "session current"
+        dbName: process.env.DBNAME,
+        ttl: 24*60*60,
     })
 }))
+
+
+app.use('/api',require("./src/route/route"));
 
 app.get('/', (req, res) => {
     res.send('ok');
@@ -33,10 +38,15 @@ mongoose
         useUnifiedTopology: true
     })
     .then(() =>
-        app.listen(port, () => {
+        app.listen(PORT, () => {
             console.log(`Server listen on ${PORT}`)
         })
     )
     .catch((erorr) => {
         console.log(erorr.message);
     })
+
+
+    //cong viec ngay mai:
+    //viet middleware authen, => check session gui len con` han. k, neu' con` thi` 
+    // refresh chung', neu' het thi` bat dang nhap lai

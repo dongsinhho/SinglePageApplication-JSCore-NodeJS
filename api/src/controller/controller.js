@@ -9,10 +9,11 @@ const controller = {
             checkUser = await users.findOne({ name: name });
             if (checkUser)
                 return res.status(400).json({ msg: 'User already exists' });
-            const hashPassword = await bcrypt.hash(password, 12);
-            const newUser = new users({ name, hashPassword });
+            console.log(name, password);
+            const hashPassword = await bcrypt.hashSync(password, 10);
+            const newUser = new users({ name, password: hashPassword });
             await newUser.save();
-            return res.status(200).json({ msg: "Register successful" });
+            res.status(200).json({ msg: "Register successful" });
         }
         catch (error) {
             return res.status(500).json({ msg: error.msg });
@@ -27,7 +28,8 @@ const controller = {
             const isMatch = bcrypt.compareSync(password, user.password);
             if (!isMatch)
                 return res.status(400).json({ msg: "Wrong password" })
-            req.session.id = user._id;
+            req.session.user = user._id;
+            console.log(req.session.user);
             return res.status(200).json({ msg: "Login successful" })
         }
         catch (error) {
@@ -38,7 +40,7 @@ const controller = {
     logout: async (req, res) => {
         try {
             req.session.destroy(err => {
-                if (err) throw err;
+                if (err) return res.status(500).json({ msg: err.msg });
                 res.status(200).send('User has been logged out');
             });
         }
@@ -47,7 +49,11 @@ const controller = {
         }
     },
     test: async (req, res) => {
-
+        console.log(req.session);
+        res.status(200).json({
+            sinh: 'dtrai',
+            code: 'chuan'
+        })
     }
 }
 

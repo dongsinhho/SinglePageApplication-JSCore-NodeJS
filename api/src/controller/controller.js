@@ -21,6 +21,7 @@ const controller = {
     },
     login: async (req, res) => {
         try {
+            console.log(req.body);
             const { name, password } = req.body;
             user = await users.findOne({ name: name });
             if (!user)

@@ -37,6 +37,7 @@ const router = async () => {
     }
     const view = new matchRoutes.route.view();
     document.querySelector("#app").innerHTML = await view.getHtml();
+    document.querySelector("#handleSinglePage").innerHTML = await view.getScript();
     
     //console.log(checkRoutes);
 }

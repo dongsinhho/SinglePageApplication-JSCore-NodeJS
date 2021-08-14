@@ -30,10 +30,22 @@ const controller = {
             if (!isMatch)
                 return res.status(400).json({ msg: "Wrong password" })
             req.session.user = user._id;
+            //res.cookie(name,value,option)
+            res.cookie('info', user._id, {
+                httpOnly: true,
+                path: "/user/info",
+                maxAge: 24 * 60 * 60 * 1000,
+                signed: true
+            })
+            
+			//console.log(req.signedCookies);
+			//res.append('Cookie', res.cookie)
+            //append cookie to response
             console.log(req.session.user);
             return res.status(200).json({ msg: "Login successful" })
         }
         catch (error) {
+            console.log(error);
             return res.status(500).json({ msg: error.msg });
         }
             

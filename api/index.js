@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const session = require("express-session");
 const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo");
@@ -11,9 +12,10 @@ const app = express();
 const PORT = process.env.PORT;
 const URL = process.env.MONGO_URL;
 
-app.use(cors())
+app.use(cors({credentials: true, origin: process.env.CLIENT_URL}));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
